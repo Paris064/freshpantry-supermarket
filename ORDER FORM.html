@@ -1,0 +1,179 @@
+ <!DOCTYPE html>
+<html>
+<head>
+  <title>SUB TASK 2 ISAT ORDER FORM</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .product-card {
+      border: 1px solid #ccc;
+      padding: 10px;
+      margin: 10px;
+    }
+
+    .btn {
+      background-color: #28a745;
+      color: white;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h2>FRESHPANTRY ORDER FORM</h2>
+    
+  </header>
+
+  <nav>
+    <a href="Home Page.html">Home Page</a> |
+    <a href="register form.html">Register Form</a> |
+    <a href="ORDER FORM.html">Order Form</a>
+  </nav>
+
+  <div id="CONTENT">
+    <p>WELCOME TO FRESHPANTRY SUPERMARKET</p>
+    <img src="logo.jpg" alt="Logo" width="150">
+  </div>
+
+  <!-- SAMPLE PRODUCTS -->
+  <div class="product-card">
+    <h3><IMg src="paris 4.jpg"alt=""></h3>
+    <p>R45.00</p>
+    <button class="btn">Add to Cart</button>
+  </div>
+  <div class="product-card">
+    <h3><IMg src="paris 3.jpg" alt=""></h3>
+    <p>R48.00</p>
+    <button class="btn">Add to Cart</button>
+  </div>
+  <div class="product-card">
+    <h3><IMg src="paris 2.jpg" alt=""></h3>
+    <p>R16.00</p>
+    <button class="btn">Add to Cart</button>
+  </div>
+<div class="product-card">
+    <h3><IMg src="download.jpeg" alt=""></h3>
+    <p>R43.00</p>
+    <button class="btn">Add to Cart</button>
+  </div>
+  <div class="product-card">
+    <h3><IMg src="paris 1.jpg"alt=""></h3>
+    <p>R28.00</p>
+    <button class="btn">Add to Cart</button>
+  </div>
+
+  <form id="orderForm">
+    <fieldset>
+      <legend>SELECT DELIVERY OR COLLECTION</legend>
+      <input type="radio" name="deliveryOption" value="Delivery"> Delivery<br>
+      <input type="radio" name="deliveryOption" value="Collect"> Collect<br>
+    </fieldset>
+
+    <fieldset>
+      <legend>BILLING ADDRESS</legend>
+      <p>First Name:</p>
+      <input type="text" id="fname" name="firstName" maxlength="25" required>
+      <p>Last Name:</p>
+      <input type="text" id="LASTNAME" name="lastName" maxlength="25" required>
+      <p>Street Address:</p>
+      <input type="text" id="streetaddress" name="streetAddress" maxlength="40" required>
+      <p>Email:</p>
+      <input type="email" id="email" name="email" required>
+    </fieldset>
+
+    <fieldset>
+      <legend>PLEASE SELECT SIZE</legend>
+      <select name="size">
+        <option value="500g">500g</option>
+        <option value="1kg">1kg</option>
+        <option value="1.5kg">1.5kg</option>
+      </select>
+    </fieldset>
+
+    <fieldset>
+      <legend>Total</legend>
+      <input type="text" id="totalPrice" readonly value="R0.00">
+    </fieldset>
+
+    <fieldset>
+      <legend>PRESS ORDER BUTTON</legend>
+      <input type="submit" value="Place Order">
+    </fieldset>
+    
+  </form>
+
+    <footer>
+    <p>Designed by frost pn &copy; 2025</p>
+  </footer>
+
+  <!-- JAVASCRIPT CODE -->
+  <script>
+    let cart = [];
+    const totalPriceField = document.getElementById("totalPrice");
+
+    function updateTotalPrice() {
+      let total = 0;
+      cart.forEach(item => {
+        total += item.price * item.quantity;
+      });
+      totalPriceField.value = "R" + total.toFixed(2);
+    }
+
+    document.querySelectorAll(".product-card .btn").forEach(btn => {
+      btn.addEventListener("click", function () {
+        const productCard = btn.closest(".product-card");
+        const name = productCard.querySelector("h3").innerText;
+        const priceText = productCard.querySelector("p").innerText;
+        const price = parseFloat(priceText.replace(/[^0-9.]/g, ""));
+
+        let existingItem = cart.find(item => item.name === name);
+        if (existingItem) {
+          existingItem.quantity++;
+        } else {
+          cart.push({ name, price, quantity: 1 });
+        }
+
+        updateTotalPrice();
+      });
+    });
+
+    document.getElementById("orderForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const fullName = document.getElementById("fname").value;
+      const lastName = document.getElementById("LASTNAME").value;
+      const streetAddress = document.getElementById("streetaddress").value;
+      const email = document.getElementById("email").value;
+
+      if (cart.length === 0) {
+        alert("Please add at least one item to your cart before placing an order.");
+        return;
+      }
+
+      let orderDetails = "";
+      let total = 0;
+      cart.forEach(item => {
+        const itemTotal = item.price * item.quantity;
+        total += itemTotal;
+        orderDetails += `${item.name} - Qty: ${item.quantity} - R${itemTotal.toFixed(2)}\n`;
+      });
+      alert(
+        `Thank you, ${fullName} ${lastName}!\n\n` +
+        `Your order has been placed successfully.\n` +
+        `Email: ${email}\nAddress: ${streetAddress}\n\n` +
+        `Items Ordered:\n${orderDetails}` +
+        `Total: R${total.toFixed(2)}`
+      );
+
+      cart = [];
+      this.reset();
+      updateTotalPrice();
+    });
+  </script>
+   <footer>
+    <p>Designed by frost pn &copy; 2025</p>
+  </footer>
+</body>
+ 
+</html>
